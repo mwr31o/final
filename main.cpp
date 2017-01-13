@@ -169,7 +169,8 @@ public:
            struct stat st;
            if((pfd>0) && (fstat(pfd, &st)!=-1))
            {
-              SendFile(fd, pfd, st.st_size); 
+              SendFile(fd, pfd, st.st_size);
+              close(pfd);
            }
            else //нет такого файла
                 SendError(fd, E_404, not_found);
@@ -232,22 +233,6 @@ int Server(char *addr, int port, char *dir)
                       */
                      }
               }
-              else
-              {/*
-              char Buffer[1024];
-              int RecvSize=recv(Events[ii].data.fd, Buffer, sizeof Buffer, MSG_NOSIGNAL);
-                  if((RecvSize<=0) && (errno != EAGAIN))
-                  {
-                  shutdown(Events[ii].data.fd, SHUT_RDWR);
-                  close(Events[ii].data.fd);
-                  //epoll_ctl(Epoll, EPOLL_CTL_DEL, Events[ii].data.fd, &Events[ii]);
-                  continue;
-                  }
-                  else if(RecvSize > 0)
-                         {//
-                         send(Events[ii].data.fd, Buffer, RecvSize, MSG_NOSIGNAL);
-                         }
-              */}
 
          }
     }
