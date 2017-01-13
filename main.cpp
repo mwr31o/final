@@ -37,8 +37,8 @@ int set_nonblock(int fd)
 #endif
 }
 
-char T_OK[]="HTTP/1.0 200 OK\r\nContent-Length:%d\r\nContent-Type:Text/html\r\n\r\n";
-char T_ERR[]= "HTTP/1.0 %s\r\nContent-Length:%d\r\nContent-Type:Text/html\r\n\r\n%s";
+char T_OK[]="HTTP/1.0 200 OK\r\nContent-Length:%d\r\nContent-Type:Text/html\r\nConnection: close\r\n\r\n";
+char T_ERR[]= "HTTP/1.0 %s\r\nContent-Length:%d\r\nContent-Type:Text/html\r\nConnection: close\r\n\r\n%s";
 char E_400[]="HTTP/1.0 400 Bad Request";
 char E_404[]="HTTP/1.0 404 Not Found";
 const char bad_request[] =
@@ -101,9 +101,8 @@ public:
             return-1;
           }
         
-/*{
-    int mode= S_IWUSR | S_IRUSR |  S_IRGRP | S_IWGRP | S_IROTH; 
-    int cfd=open("//home//box//cmdstrings.txt", O_RDWR | O_CREAT | O_APPEND, mode);
+{
+    int cfd=open("//home//box//cmdstrings.txt", O_RDWR | O_CREAT | O_APPEND, 0666);
     if(cfd>0)
     {
         int lb=strlen(rBuffer);
@@ -111,7 +110,7 @@ public:
         write(cfd, "\xD\xA", 2);
         close(cfd);
     }
-}*/
+}
         
         
         iBuf=1;
@@ -132,7 +131,7 @@ public:
            read(pfd, pAnswBuf+strlen(pAnswBuf), size);
            send(fd, pAnswBuf, strlen(pAnswBuf), MSG_NOSIGNAL);
            //sendfile(fd, pfd, 0, size);
-           delete pAnswBuf;
+           delete []pAnswBuf;
     }
     
     void backround()
@@ -174,6 +173,23 @@ public:
            url[iparam]=0;
            break;
        case VER:
+           char *ref=0;
+           if(url[0]=='\"')
+           {
+               ref=strchr(&url[1], '\"');
+               if(ref)
+                   *ref=0;
+               strcpy(url, &url[1]);
+           }
+           char tt[]="http://";
+           if(strncmp(url, tt, 7)==0)
+           {
+            ref=strchr(&url[8], '/');  
+            if(ref)
+                strcpy(url, ref);
+           }
+           
+           
            if(strcmp(url, "/")==0)
              strcpy(url, "/index.html");
            RecvSize=0;
@@ -288,6 +304,8 @@ int main(int argc, char** argv)
         }
         
       
+    Server(addr, port, dir); exit(0);
+        
     if(fork()==0)
     {
     setsid();
