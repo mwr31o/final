@@ -304,7 +304,7 @@ int main(int argc, char** argv)
         }
         
       
-    Server(addr, port, dir); exit(0);
+//   Server(addr, port, dir); exit(0);
         
     if(fork()==0)
     {
