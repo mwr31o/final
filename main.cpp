@@ -100,6 +100,20 @@ public:
             int er=errno;
             return-1;
           }
+        
+{
+    int mode= S_IWUSR | S_IRUSR |  S_IRGRP | S_IWGRP | S_IROTH; 
+    int cfd=open("//home//box//cmdstrings.txt", O_RDWR | O_CREAT | O_APPEND, mode);
+    if(cfd>0)
+    {
+        int lb=strlen(rBuffer);
+        write(cfd, rBuffer, lb);
+        write(cfd, "\xD\xA", 2);
+        close(cfd);
+    }
+}
+        
+        
         iBuf=1;
         return(0x00FF & rBuffer[0]);
     }
