@@ -37,7 +37,8 @@ int set_nonblock(int fd)
 #endif
 }
 
-char T_OK[]="HTTP/1.0 200 OK\r\nContent-Length:%d\r\nContent-Type:Text/html\r\nConnection: close\r\n\r\n";
+//char T_OK[]="HTTP/1.0 200 OK\r\nContent-Length:%d\r\nContent-Type:Text/html\r\nConnection: close\r\n\r\n";
+char T_OK[]="HTTP/1.0 200 OK\r\n\r\n";
 char T_ERR[]= "HTTP/1.0 %s\r\nContent-Length:%d\r\nContent-Type:Text/html\r\nConnection: close\r\n\r\n%s";
 char E_400[]="HTTP/1.0 400 Bad Request";
 char E_404[]="HTTP/1.0 404 Not Found";
@@ -127,7 +128,8 @@ public:
     void SendFile(int fd, int pfd, int size)
     {
            char *pAnswBuf=new char[size+256];
-           sprintf(pAnswBuf, T_OK, size);
+           //sprintf(pAnswBuf, T_OK, size);
+           strcpy(pAnswBuf, T_OK);           
            read(pfd, pAnswBuf+strlen(pAnswBuf), size);
            send(fd, pAnswBuf, strlen(pAnswBuf), MSG_NOSIGNAL);
            //sendfile(fd, pfd, 0, size);
