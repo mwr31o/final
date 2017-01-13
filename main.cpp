@@ -40,8 +40,8 @@ int set_nonblock(int fd)
 char T_OK[]="HTTP/1.0 200 OK\r\nContent-Length:%d\r\nContent-Type:Text/html\r\nConnection: close\r\n\r\n";
 //char T_OK[]="HTTP/1.0 200 OK\r\n\r\n";
 char T_ERR[]= "HTTP/1.0 %s\r\nContent-Length:%d\r\nContent-Type:Text/html\r\nConnection: close\r\n\r\n%s";
-char E_400[]="HTTP/1.0 400 Bad Request";
-char E_404[]="HTTP/1.0 404 Not Found";
+char E_400[]="400 Bad Request";
+char E_404[]="404 Not Found";
 const char bad_request[] =
   "<html>"
   "<head><title>Bad Request</title></head>"
