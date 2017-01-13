@@ -101,7 +101,7 @@ public:
             return-1;
           }
         
-{
+/*{
     int mode= S_IWUSR | S_IRUSR |  S_IRGRP | S_IWGRP | S_IROTH; 
     int cfd=open("//home//box//cmdstrings.txt", O_RDWR | O_CREAT | O_APPEND, mode);
     if(cfd>0)
@@ -111,7 +111,7 @@ public:
         write(cfd, "\xD\xA", 2);
         close(cfd);
     }
-}
+}*/
         
         
         iBuf=1;
@@ -127,10 +127,12 @@ public:
     
     void SendFile(int fd, int pfd, int size)
     {
-           char AnswBuf[1024];
-           sprintf(AnswBuf, T_OK, size);
-           send(fd, AnswBuf, strlen(AnswBuf), MSG_NOSIGNAL);
-           sendfile(fd, pfd, 0, size);
+           char *pAnswBuf=new char[size+256];
+           sprintf(pAnswBuf, T_OK, size);
+           read(pfd, pAnswBuf+strlen(pAnswBuf), size);
+           send(fd, pAnswBuf, strlen(pAnswBuf), MSG_NOSIGNAL);
+           //sendfile(fd, pfd, 0, size);
+           delete pAnswBuf;
     }
     
     void backround()
